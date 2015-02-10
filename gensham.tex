@@ -101,18 +101,20 @@ The technique also allows us to parameterize our choice of the halo property in 
 \section{Abundance Matching with a Generalized Halo Property}
 \label{sec:sham}
 
-Suppose we want to build a model based on a some property $x,$ which we want to be in some sense intermediate between two halo properties we already know and love. For simplicity and definiteness, let's figure out how to do this using $\vpeak$ and $\mpeak$ in the absence of scatter. 
+\subsection{Traditional Implementation}
+The basic principle of abundance matching is that there exists a single (sub)halo property which is in monotonic correspondence with the stellar mass of the galaxy residing at the center of the (sub)halo. Once the amount of scatter between this halo property and $\mstar$ is specified, the mapping between galaxies and dark matter halos is determined. 
 
-In the standard approach, we first compute the cumulative number density of the halos, and calculate our mapping $\bar{\mstar}(x)$ in the normal way, by finding the zero of the function 
+The standard implementation of this model begins by first selecting a particular halo property, such as peak historical mass $\mpeak.$ Next, one computes the cumulative number density of halos and subhalos as a function of $\mpeak,$ which we will write as $\Nhalo(>\mpeak).$ This calculation is extraordinarily simple. The (sub)halos are rank-ordered according to the value of $\mpeak,$ and the cumulative number density of the $i^{\rm th}-$rank (sub)halo is given by 
+$$\Nhalo(>\mpeak^{\rm i}) = \frac{i}{V_{\rm box}},$$ where $V_{\rm box}$ is the simulated volume. 
+
+The key insight behind abundance matching is that there exists a unique deterministic mapping $\bar{M}_{\ast}(\mpeak)$ that preserves the observed stellar mass function. 
+Once the value of $\Nhalo(>\mpeak)$ is known for every (sub)halo, this mapping can be numerically calculated by finding the zero of the function 
 \beq
 \label{eq:shamdef}
 \mathcal{F}(\mstar | x) \equiv \Nhalo(> x) - \Ngal(>\mstar),
 \eeq
-where $\Nhalo(>x)$ is the cumulative abundance of (sub)halos as a function of $x,$ and $\Ngal(>\mstar)$ is the observed cumulative stellar mass function, 
-\beqray
-\Nhalo(>x) & \equiv & \int_{x}^{\infty}\dd{x'}\dnhalodx{x'}, \\
-\Ngal(>\mstar) & \equiv & \int_{\mstar}^{\infty}\dd\mstar'\Phi_{\rm gal}(\mstar'). 
-\eeqray
+where $\Ngal(>\mstar)$ is the observed cumulative stellar mass function. Introducing stochasticity between $\mstar$ and $\mpeak$ can be accomplished by the iterative deconvolution method described in \citet{behroozi10} or \citet{kravtsov13}. 
+
 Ok, so the core quantity that we need to do abundance matching with, say, $\vpeak,$ is just the value of $\Nhalo(>\vpeak)$ for every (sub)halo in our box. Computing this quantity is trivial, $$\Nhalo(>\vpeak^{\rm i})={\rm i}/L^{3}_{\rm box},$$ where $i$ is the $\vpeak-$based rank-order of the (sub)halos. 
 
 That's all the standard jam. But now suppose we want to conduct AM using a property $x$ that is ``between" $\vpeak$ and $\mpeak.$ We begin in the normal way by computing the numerical value of $\Nhalo(>\mpeak)$ and $\Nhalo(>\vpeak)$ for every (sub)halo in the box, exactly as above. Next we define the following {\em weighted cumulative abundance}:
@@ -122,8 +124,9 @@ That's all the standard jam. But now suppose we want to conduct AM using a prope
 where $w$ is any number between $0$ and $1.$ This gives us a numerical value of $\Nhalo(>x)$ for every (sub)halo in the box. 
 Now we just use Eq.~\ref{eq:shamdef} to assign $\mstar$ to every (sub)halo using AM based on our newly defined property $x.$ 
 
-Notice that we never even assigned values of $x$ to the (sub)halos! So this trick entirely circumvents the problem that $\mpeak$ and $\vpeak$ do not even have the same units. {\bf Upshot:} we can allow $w$ to be a continuously varying parameter in an MCMC, allowing us to  marginalize over our uncertainty about the ``true" halo property in the AM-prediction of $\mstar.$ This provides a natural extension to the abundance matching parameter scan explored in \citet{reddick_etal12}. 
+Notice that we never even assigned values of $x$ to the (sub)halos! So this trick entirely circumvents the problem that $\mpeak$ and $\vpeak$ do not even have the same units. {\bf Upshot:} we can allow $w$ to be a continuously varying parameter in an MCMC, allowing us to  marginalize over our uncertainty about the ``true" halo property in the AM-prediction of $\mstar.$ This provides a natural extension to the abundance matching parameter scan explored in \citet{reddick12}. 
 
+%Suppose we want to build a model based on a some property $x,$ which we want to be in some sense intermediate between two halo properties we already know and love. For simplicity and definiteness, let's figure out how to do this using $\vpeak$ and $\mpeak$ in the absence of scatter. 
 
 \section{The HOD/CLF with a Generalized Halo Property}
 \label{sec:hodclf}
