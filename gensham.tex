@@ -66,7 +66,7 @@
 \title[Generalized Galaxy-Halo Modeling]
 {Discovering the True Regulator of Stellar Mass}
 
-\author[A.P. Hearin]{Andrew P. Hearin}
+\author[Hearin \& Behroozi]{Andrew P. Hearin \& Peter S. Behroozi}
 
 \maketitle
 
@@ -74,7 +74,7 @@
 
 
 \begin{abstract}
-Empirical models of the galaxy-halo connection are built upon the assumption that some host halo property serves as the statistical regulator of the stellar mass $\mstar$ content of the halo. This is the core assumption that permits us to use N-body simulations in cosmological parameter inference. In this paper I introduce the weighted cumulative abundance technique (WCA), which allows {\em the choice of halo property itself} to be parameterized and continuously varied in a likelihood analysis. There are significant, systematic differences between empirical models based on different halo properties, and it has recently been shown that the associated systematic error known as {\em galaxy assembly bias} threatens the precision cosmology program.  I describe how to use WCA to  generalize abundance matching models as well as halo occupation distribution (HOD) models to make them more robust to assembly bias. I conclude by discussing the role that the WCA technique will play in future constraints on cosmology with large-scale structure. 
+Empirical models of the galaxy-halo connection are built upon the assumption that some host halo property serves as the statistical regulator of the stellar mass $\mstar$ content of the halo. This is the core assumption that permits us to use N-body simulations in cosmological parameter inference. In this paper we introduce the weighted rank-order technique (WRO), which allows {\em the choice of halo property itself} to be parameterized and continuously varied in a likelihood analysis. There are significant, systematic differences between empirical models based on different halo properties, and it has recently been shown that the associated systematic error known as {\em galaxy assembly bias} threatens the precision cosmology program.  We describe how to use WRO to  generalize abundance matching models as well as halo occupation distribution (HOD) models to make them more robust to assembly bias. We conclude by discussing the role that the WCA technique will play in future constraints on cosmology with large-scale structure. 
 \end{abstract}
 
 
@@ -102,6 +102,7 @@ The technique also allows us to parameterize our choice of the halo property in 
 \label{sec:sham}
 
 \subsection{Traditional Implementation}
+\label{subsec:tradsham}
 The basic principle of abundance matching is that there exists a single (sub)halo property which is in monotonic correspondence with the stellar mass of the galaxy residing at the center of the (sub)halo. Once the amount of scatter between this halo property and $\mstar$ is specified, the mapping between galaxies and dark matter halos is determined. 
 
 The standard implementation of this model begins by first selecting a particular halo property, such as peak historical mass $\mpeak.$ Next, one computes the cumulative number density of halos and subhalos as a function of $\mpeak,$ which we will write as $\Nhalo(>\mpeak).$ This calculation is extraordinarily simple. The (sub)halos are rank-ordered according to the value of $\mpeak,$ and the cumulative number density of the $i^{\rm th}-$rank (sub)halo is given by 
@@ -117,22 +118,40 @@ where $\Ngal(>\mstar)$ is the observed cumulative stellar mass function. For any
 
 Conventionally, the upshot of the above calculation is the determination of the mapping $\bar{M}_{\ast}(\mpeak).$ This well-studied map is most commonly employed in the literature with convenient fitting functions such as those given in \citet{behroozi10,moster10,kravtsov13}. 
 
-\subsection{Weighted Cumulative Abundance: application to abundance matching}
-Ok, so the core quantity that we need to do abundance matching with, say, $\vpeak,$ is just the value of $\Nhalo(>\vpeak)$ for every (sub)halo in our box. Computing this quantity is trivial, $$\Nhalo(>\vpeak^{\rm i})={\rm i}/L^{3}_{\rm box},$$ where $i$ is the $\vpeak-$based rank-order of the (sub)halos. 
+\subsection{Weighted Rank-Ordering: application to abundance matching}
+\label{subsec:gensham}
 
-That's all the standard jam. But now suppose we want to conduct AM using a property $x$ that is ``between" $\vpeak$ and $\mpeak.$ We begin in the normal way by computing the numerical value of $\Nhalo(>\mpeak)$ and $\Nhalo(>\vpeak)$ for every (sub)halo in the box, exactly as above. Next we define the following {\em weighted cumulative abundance}:
+Of course, there is no a priori reason that the choice of $\mpeak$ is innocuous. In fact, it has been shown in \citet{reddick12} that different choices for the abundance matching parameter lead to models with different clustering predictions. This directly implies that existing SDSS data can discriminate between different choices for the primary halo property regulating $\mstar.$ We now describe how to adapt the methods outlined above in \S~\ref{subsec:tradsham} to build models based on a halo property that is ``intermediate'' between two particular, discrete choices. 
+
+For illustrative purposes, let's begin with a specific example. Suppose we want to conduct abundance matching using a property $x$ that is ``between" $\vpeak$ and $\mpeak.$ We begin in the normal way by computing the numerical value of $\Nhalo(>\mpeak)$ and $\Nhalo(>\vpeak)$ for every (sub)halo in the box:
+
+\begin{eqnarray*}
+\Nhalo(>\mpeak^{\rm i}) & = & \frac{i_{\mpeak}}{V_{\rm box}} \\
+\Nhalo(>\vpeak^{\rm j}) & = & \frac{j_{\vpeak}}{V_{\rm box}},
+\end{eqnarray*}
+
+ Next we define the weighted sum of the $\mpeak-$ and $\vpeak-$based ranks:
 \beq
-\Nhalo(>x) \equiv w\Nhalo(>\vpeak) + (1-w)\Nhalo(>\mpeak), 
+\mathcal{R}_{x}(w | \mpeak,\vpeak) \equiv w i_{\mpeak} + (1-w)j_{\vpeak}
 \eeq
-where $w$ is any number between $0$ and $1.$ This gives us a numerical value of $\Nhalo(>x)$ for every (sub)halo in the box. 
+where $w$ is any number between $0$ and $1.$ This gives us a new quantity $\mathcal{R}_{x}$ for every (sub)halo in the simulation that we can rank-order. The resulting ranks $k_{\rm x}$ allow us to compute a new, $x-$based cumulative number density:
+\beq
+\Nhalo(>x^{\rm k})  =  \frac{k_{\rm x}}{V_{\rm box}}. 
+\eeq
 Now we just use Eq.~\ref{eq:shamdef} to assign $\mstar$ to every (sub)halo using AM based on our newly defined property $x.$ 
 
 Notice that we never even assigned values of $x$ to the (sub)halos! So this trick entirely circumvents the problem that $\mpeak$ and $\vpeak$ do not even have the same units. {\bf Upshot:} we can allow $w$ to be a continuously varying parameter in an MCMC, allowing us to  marginalize over our uncertainty about the ``true" halo property in the AM-prediction of $\mstar.$ This provides a natural extension to the abundance matching parameter scan explored in \citet{reddick12}. 
 
 %Suppose we want to build a model based on a some property $x,$ which we want to be in some sense intermediate between two halo properties we already know and love. For simplicity and definiteness, let's figure out how to do this using $\vpeak$ and $\mpeak$ in the absence of scatter. 
 
-\section{The HOD/CLF with a Generalized Halo Property}
+\section{The HOD with a Generalized Halo Property}
 \label{sec:hodclf}
+
+\subsection{Traditional Implementation}
+\label{subsec:tradhodclf}
+
+\subsection{Weighted Rank-Ordering: application to the HOD}
+\label{subsec:genhodclf}
 
 Now let's build new families of HOD models $P(\Ngal|x)$ based on a generalized host halo property $x$ that's ``between" $\mvir$ and $\vmax.$ 
 
@@ -156,8 +175,7 @@ This gives us a recipe to explore entirely new models that are in every way equi
 
 \section{Conclusion}
 
-Going beyond vir is not just  amatter of taste The danger is to rule out GR. This i s a serious dngerCurrently, no guarantees YOu just hope you've chosen the right proprty, based on ery loittle at all. Mostly heurisic argumnts that are known o fail in detail. 
-
+We provide a new technical tool to use in empirical modeling. 
 
 \bibliography{gensham}
 
