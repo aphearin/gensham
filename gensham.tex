@@ -113,8 +113,11 @@ Once the value of $\Nhalo(>\mpeak)$ is known for every (sub)halo, this mapping c
 \label{eq:shamdef}
 \mathcal{F}(\mstar | x) \equiv \Nhalo(> x) - \Ngal(>\mstar),
 \eeq
-where $\Ngal(>\mstar)$ is the observed cumulative stellar mass function. Introducing stochasticity between $\mstar$ and $\mpeak$ can be accomplished by the iterative deconvolution method described in \citet{behroozi10} or \citet{kravtsov13}. 
+where $\Ngal(>\mstar)$ is the observed cumulative stellar mass function. For any particular choice of (possibly $\mpeak-$dependent) stochasticity, there also exists a unique map $\bar{M}_{\ast}(\mpeak)$ that includes this scatter and preserves the observed $\Ngal(>\mstar).$ Determining this map and introducing stochasticity between $\mstar$ and $\mpeak$ can be accomplished by the deconvolution method described in Section 3.3.1 of \citet{behroozi10} or in Appendix A of \citet{kravtsov13}. 
 
+Conventionally, the upshot of the above calculation is the determination of the mapping $\bar{M}_{\ast}(\mpeak).$ This well-studied map is most commonly employed in the literature with convenient fitting functions such as those given in \citet{behroozi10,moster10,kravtsov13}. 
+
+\subsection{Weighted Cumulative Abundance: application to abundance matching}
 Ok, so the core quantity that we need to do abundance matching with, say, $\vpeak,$ is just the value of $\Nhalo(>\vpeak)$ for every (sub)halo in our box. Computing this quantity is trivial, $$\Nhalo(>\vpeak^{\rm i})={\rm i}/L^{3}_{\rm box},$$ where $i$ is the $\vpeak-$based rank-order of the (sub)halos. 
 
 That's all the standard jam. But now suppose we want to conduct AM using a property $x$ that is ``between" $\vpeak$ and $\mpeak.$ We begin in the normal way by computing the numerical value of $\Nhalo(>\mpeak)$ and $\Nhalo(>\vpeak)$ for every (sub)halo in the box, exactly as above. Next we define the following {\em weighted cumulative abundance}:
