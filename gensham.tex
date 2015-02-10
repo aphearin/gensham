@@ -130,19 +130,19 @@ For illustrative purposes, let's begin with a specific example. Suppose we want 
 \Nhalo(>\vpeak^{\rm j}) & = & \frac{j_{\vpeak}}{V_{\rm box}},
 \end{eqnarray*}
 
- Next we define the weighted sum of the $\mpeak-$ and $\vpeak-$based ranks:
-\beq
-\mathcal{R}_{x}(w | \mpeak,\vpeak) \equiv w i_{\mpeak} + (1-w)j_{\vpeak}
-\eeq
+ Next we define the weighted logarithmic sum of the $\mpeak-$ and $\vpeak-$based ranks:
+\begin{equation*}
+\mathcal{R}_{x}(w | \mpeak,\vpeak) \equiv w\log i_{\mpeak} + (1-w)\log j_{\vpeak}
+\end{equation*}
 where $w$ is any number between $0$ and $1.$ This gives us a new quantity $\mathcal{R}_{x}$ for every (sub)halo in the simulation that we can rank-order. The resulting ranks $k_{\rm x}$ allow us to compute a new, $x-$based cumulative number density:
 \beq
 \Nhalo(>x^{\rm k})  =  \frac{k_{\rm x}}{V_{\rm box}}. 
 \eeq
-Now we just use Eq.~\ref{eq:shamdef} to assign $\mstar$ to every (sub)halo using AM based on our newly defined property $x.$ 
+Finally we just use Eq.~\ref{eq:shamdef} to assign $\mstar$ to every (sub)halo using AM based on our newly defined property $x.$ 
 
 Notice that we never even assigned values of $x$ to the (sub)halos! So this trick entirely circumvents the problem that $\mpeak$ and $\vpeak$ do not even have the same units. {\bf Upshot:} we can allow $w$ to be a continuously varying parameter in an MCMC, allowing us to  marginalize over our uncertainty about the ``true" halo property in the AM-prediction of $\mstar.$ This provides a natural extension to the abundance matching parameter scan explored in \citet{reddick12}. 
 
-%Suppose we want to build a model based on a some property $x,$ which we want to be in some sense intermediate between two halo properties we already know and love. For simplicity and definiteness, let's figure out how to do this using $\vpeak$ and $\mpeak$ in the absence of scatter. 
+Brief comment on how to implement scatter without ever knowing the value of $x.$ 
 
 \section{The HOD with a Generalized Halo Property}
 \label{sec:hodclf}
