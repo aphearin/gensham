@@ -1,0 +1,8 @@
+*.bbl
+*.blg
+*.log
+*.aux
+*.gz
+*.cls
+*.bst
+gensham.pdf

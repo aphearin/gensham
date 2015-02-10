@@ -1,0 +1,140 @@
+\documentclass[usenatbib,usegraphicx,letterpaper]{mn2e}
+\usepackage[totalwidth=480pt,totalheight=680pt]{geometry}
+
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{amsmath}
+\usepackage{color}
+
+%-------- journals
+\newcommand{\araa}{ARAA~}
+\newcommand{\apj}{ApJ~}
+\newcommand{\apjl}{ApJL~}
+\newcommand{\apjs}{ApJS~}
+\newcommand{\mnras}{MNRAS~}
+\newcommand{\nat}{Nature~}
+\newcommand{\physrep}{Phys. Rep.~}
+\newcommand{\aj}{AJ~}
+\newcommand{\pasp}{PASP~}
+\newcommand{\prd}{Phys.~Rev.~D}
+\newcommand{\jcap}{JCAP}
+
+
+\bibliographystyle{mn2e} 
+\newcounter{address}
+
+
+
+
+\newcommand{\vmax}{V_{\rm max}}
+\newcommand{\mvir}{M_{\rm vir}}
+
+\newcommand{\mpeak}{M_{\rm peak}}
+\newcommand{\vpeak}{V_{\rm peak}}
+
+
+%%%% Misc %%%
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\beqray}{\begin{eqnarray}}
+\newcommand{\eeqray}{\end{eqnarray}}
+
+\newcommand{\ben}{\begin{enumerate}}
+\newcommand{\een}{\end{enumerate}}
+\newcommand{\bit}{\begin{itemize}}
+\newcommand{\eit}{\end{itemize}}
+
+\newcommand{\dd}{\mathrm{d}}
+
+\newcommand{\Ngal}{N_{\rm gal}}
+\newcommand{\Nhalo}{N_{\rm halo}}
+\newcommand{\dnhalodx}[1]{{\rm d}n_{\rm h} / {\rm d}#1}
+
+\newcommand{\mstar}{M_{\ast}}
+
+
+\usepackage{epsfig}  \usepackage{graphicx}   \usepackage{rotating}
+
+\begin{document}
+
+\title[Generalized Galaxy-Halo Modeling]
+{Discovering the True Regulator of Stellar Mass}
+
+\author[A.P. Hearin]{Andrew P. Hearin}
+
+\maketitle
+
+
+
+
+\begin{abstract}
+Empirical models of the galaxy-halo connection are built upon the assumption that some host halo property serves as the statistical regulator of the stellar mass $\mstar$ content of the halo. This assumption provides the key ingredient permitting us to use N-body simulations in cosmological parameter inference. While the true statistical regular of $\mstar$ is not known, the most widespread choice is halo mass $\mvir,$ although $\vmax$ is also common. There are significant, systematic differences between $\vmax-$ vs. $\mvir-$based models, and it has recently been shown that the associated systematic error known as {\em galaxy assembly bias} threatens the precision cosmology program. In these notes I introduce the weighted cumulative abundance (WCA) technique, which allows {\em the choice of halo property itself} to be parameterized and continuously varied in a likelihood analysis. I describe how to use WCA to  generalize abundance matching models as well as halo occupation distribution (HOD) models to make them more robust to assembly bias. I conclude by discussing the role that the WCA technique will play in future constraints on cosmology with large-scale structure. 
+\end{abstract}
+
+
+\section{Introduction}
+
+The first step in all traditional formulations of empirical models is to choose a particular halo property upon which the model is based. In AM-type models, this property is commonly something like $\vpeak$ or $\mpeak$ of both hosts and subs, while in HOD/CLF-type models this property is usually host halo $\mvir.$ 
+
+Due to assembly bias, and particularly its scale-dependence, models formulated on one halo property need not necessarily map onto models based on a different property. So it may not be possible to get a good $\chi^2$ fit to a model based on one halo property if the model in your likelihood analysis is based on a different halo property. This is the bird's-eye-view upshot of the Phantom Menace exercise. 
+
+The problem is that we don't know what the true halo property in Nature is, and this lack of knowledge poses a systematic for both galaxy evolution and cosmology applications. These notes show how to build models based on continuous variations between any finite number of different halo properties. The AM formulation of the generalization is in \S~\ref{sec:sham}, and the HOD/CLF formulation is in  \S~\ref{sec:hodclf}. 
+
+
+\section{Application to Abundance Matching}
+\label{sec:sham}
+
+Suppose we want to build a model based on a some property $x,$ which we want to be in some sense intermediate between two halo properties we already know and love. For simplicity and definiteness, let's figure out how to do this using $\vpeak$ and $\mpeak$ in the absence of scatter. 
+
+In the standard approach, we first compute the cumulative number density of the halos, and calculate our mapping $\bar{\mstar}(x)$ in the normal way, by finding the zero of the function 
+\beq
+\label{eq:shamdef}
+\mathcal{F}(\mstar | x) \equiv \Nhalo(> x) - \Ngal(>\mstar),
+\eeq
+where $\Nhalo(>x)$ is the cumulative abundance of (sub)halos as a function of $x,$ and $\Ngal(>\mstar)$ is the observed cumulative stellar mass function, 
+\beqray
+\Nhalo(>x) & \equiv & \int_{x}^{\infty}\dd{x'}\dnhalodx{x'}, \\
+\Ngal(>\mstar) & \equiv & \int_{\mstar}^{\infty}\dd\mstar'\Phi_{\rm gal}(\mstar'). 
+\eeqray
+Ok, so the core quantity that we need to do abundance matching with, say, $\vpeak,$ is just the value of $\Nhalo(>\vpeak)$ for every (sub)halo in our box. Computing this quantity is trivial, $$\Nhalo(>\vpeak^{\rm i})={\rm i}/L^{3}_{\rm box},$$ where $i$ is the $\vpeak-$based rank-order of the (sub)halos. 
+
+That's all the standard jam. But now suppose we want to conduct AM using a property $x$ that is ``between" $\vpeak$ and $\mpeak.$ We begin in the normal way by computing the numerical value of $\Nhalo(>\mpeak)$ and $\Nhalo(>\vpeak)$ for every (sub)halo in the box, exactly as above. Next we define the following {\em weighted cumulative abundance}:
+\beq
+\Nhalo(>x) \equiv w\Nhalo(>\vpeak) + (1-w)\Nhalo(>\mpeak), 
+\eeq
+where $w$ is any number between $0$ and $1.$ This gives us a numerical value of $\Nhalo(>x)$ for every (sub)halo in the box. 
+Now we just use Eq.~\ref{eq:shamdef} to assign $\mstar$ to every (sub)halo using AM based on our newly defined property $x.$ 
+
+Notice that we never even assigned values of $x$ to the (sub)halos! So this trick entirely circumvents the problem that $\mpeak$ and $\vpeak$ do not even have the same units. {\bf Upshot:} we can allow $w$ to be a continuously varying parameter in an MCMC, allowing us to  marginalize over our uncertainty about the ``true" halo property in the AM-prediction of $\mstar.$ This provides a natural extension to the abundance matching parameter scan explored in \citet{reddick_etal12}. 
+
+
+\section{Application to the HOD/CLF}
+\label{sec:hodclf}
+
+Now let's build new families of HOD models $P(\Ngal|x)$ based on a generalized host halo property $x$ that's ``between" $\mvir$ and $\vmax.$ 
+
+\ben
+\item Write down your favorite parameterization for $P(\Ngal | \mvir).$
+\item Compute $\Nhalo(>\mvir)$ for every halo.\footnote{Again, this is computed as $i/L_{\rm box}^{3},$ except this time neglecting subhalos from all aspects of the calculation, as is usual for this type of model.} 
+
+The outcome of this step is to provide a bijective mapping between $\Nhalo(>\mvir)\leftrightarrow\mvir.$ 
+\item Use the mapping provided by Step (2) to recast $$P(\Ngal | \mvir)\Rightarrow P(\Ngal |\Nhalo(>\mvir)).$$
+This is accomplished by function composition: $$\langle\Ngal\rangle(\mvir)\Rightarrow\langle\Ngal\rangle(\Nhalo(>\mvir)).$$
+
+This doesn't change our original model in the slightest; we're now just using a new label $\Nhalo(>\mvir)$ in our equations.
+\item Compute $\Nhalo(>\vmax)$ for every halo, giving us $\Nhalo(>\vmax)\leftrightarrow\vmax.$ 
+\item By replacing all appearances of $\Nhalo(>\mvir)$ with $\Nhalo(>\vmax),$ 
+we construct a new HOD model $P(\Ngal|\vmax)$ that is the ``$\vmax-$equivalent'' of our original model $P(\Ngal | \mvir).$
+\item More than this, we can also construct entirely new models using $$\Nhalo(>x) \equiv w\Nhalo(>\vmax) + (1-w)\Nhalo(>\mvir).$$ 
+Those models will be the ``$x-$equivalent'' HOD model to our original. Again, at no point do we ever need to compute the value of $x.$
+\een
+
+This gives us a recipe to explore entirely new models that are in every way equivalent to our original $P(\Ngal | \mvir),$ but instead belong to a continuous family of halo properties spanned by $\vmax$ and $\mvir.$
+
+
+
+
+\bibliography{gensham}
+
+\end{document}
+
