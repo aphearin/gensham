@@ -25,6 +25,15 @@
 
 
 
+%%%%% Halo Model %%%%%
+\newcommand{\Ngal}{N_{\rm gal}}
+\newcommand{\Nhalo}{N_{\rm halo}}
+
+\newcommand{\dnhalodx}[1]{{\rm d}n_{\rm h} / {\rm d}#1}
+\newcommand{\bhalo}{b_{\rm h}}
+
+\newcommand{\philm}[2]{\Phi(#1|#2)}
+\newcommand{\meann}[1]{\langle#1\rangle}
 
 \newcommand{\vmax}{V_{\rm max}}
 \newcommand{\mvir}{M_{\rm vir}}
@@ -46,9 +55,6 @@
 
 \newcommand{\dd}{\mathrm{d}}
 
-\newcommand{\Ngal}{N_{\rm gal}}
-\newcommand{\Nhalo}{N_{\rm halo}}
-\newcommand{\dnhalodx}[1]{{\rm d}n_{\rm h} / {\rm d}#1}
 
 \newcommand{\mstar}{M_{\ast}}
 
@@ -74,15 +80,25 @@ Empirical models of the galaxy-halo connection are built upon the assumption tha
 
 \section{Introduction}
 
+\ben
+\item The halo model is the premier tool to constrain dark energy with large-scale structure measurements. 
+\item How does that work? First you enumerate $\dnhalodx{\mvir}$ and $\bhalo(\mvir)$ through a painful calibration exercise. 
 
-The first step in all traditional formulations of empirical models is to choose a particular halo property upon which the model is based. In AM-type models, this property is commonly something like $\vpeak$ or $\mpeak$ of both hosts and subs, while in HOD/CLF-type models this property is usually host halo $\mvir.$ 
+Next you write down a parameterized form of an occupation model such as $\philm{\mstar}{\mvir}$ or $\meann{\Ngal}(\mvir).$
 
-Due to assembly bias, and particularly its scale-dependence, models formulated on one halo property need not necessarily map onto models based on a different property. So it may not be possible to get a good $\chi^2$ fit to a model based on one halo property if the model in your likelihood analysis is based on a different halo property. This is the bird's-eye-view upshot of the Phantom Menace exercise. 
+Finally, you use e.g., clustering and lensing predictions of the model to constrain both cosmological and galaxy-halo parameters. 
+\item However, if you base your model on different halo properties, your model predictions may be qualitatively distinct, because assembly bias is scale dependent. Halo mass $\mvir$ is the most widespread, but its definition is based on spherical top-hat collapse, which is poorly motivated in detail. The impact of the choice of halo parameter has been poorly studied heretofore, because there has been no way to easily compare models based on different properties, and because precision demands have only recently reached this point. 
+\item This paper provides a new technique that allows us to construct and compare models that are identical in every way, but differ by the choice of halo property. 
 
-The problem is that we don't know what the true halo property in Nature is, and this lack of knowledge poses a systematic for both galaxy evolution and cosmology applications. These notes show how to build models based on continuous variations between any finite number of different halo properties. The AM formulation of the generalization is in \S~\ref{sec:sham}, and the HOD/CLF formulation is in  \S~\ref{sec:hodclf}. 
+The technique also allows us to parameterize our choice of the halo property in a continuous fashion, so that we can marginalize over our uncertainty in the true halo property. 
+\item The AM formulation of the generalization is in \S~\ref{sec:sham}, and the HOD/CLF formulation is in  \S~\ref{sec:hodclf}. 
+
+\een
+
+%The first step in all traditional formulations of empirical models is to choose a particular halo property upon which the model is based. In AM-type models, this property is commonly something like $\vpeak$ or $\mpeak$ of both hosts and subs, while in HOD/CLF-type models this property is usually host halo $\mvir.$ 
 
 
-\section{Application to Abundance Matching}
+\section{Abundance Matching with a Generalized Halo Property}
 \label{sec:sham}
 
 Suppose we want to build a model based on a some property $x,$ which we want to be in some sense intermediate between two halo properties we already know and love. For simplicity and definiteness, let's figure out how to do this using $\vpeak$ and $\mpeak$ in the absence of scatter. 
@@ -109,7 +125,7 @@ Now we just use Eq.~\ref{eq:shamdef} to assign $\mstar$ to every (sub)halo using
 Notice that we never even assigned values of $x$ to the (sub)halos! So this trick entirely circumvents the problem that $\mpeak$ and $\vpeak$ do not even have the same units. {\bf Upshot:} we can allow $w$ to be a continuously varying parameter in an MCMC, allowing us to  marginalize over our uncertainty about the ``true" halo property in the AM-prediction of $\mstar.$ This provides a natural extension to the abundance matching parameter scan explored in \citet{reddick_etal12}. 
 
 
-\section{Application to the HOD/CLF}
+\section{The HOD/CLF with a Generalized Halo Property}
 \label{sec:hodclf}
 
 Now let's build new families of HOD models $P(\Ngal|x)$ based on a generalized host halo property $x$ that's ``between" $\mvir$ and $\vmax.$ 
